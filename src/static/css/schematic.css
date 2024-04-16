@@ -1,0 +1,58 @@
+.parent {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+.parent-left {
+    display: flex;
+    align-items: center;
+    justify-items: left;
+}
+.sprite {
+    display: inline-block;
+    vertical-align: text-top;
+    overflow: hidden;
+    transform-origin: left top;
+}
+.sprite-small {
+    transform:scale(0.8);
+    transform-origin: left center;
+    overflow: hidden;
+    left: 0;
+}
+.sprite-small-right {
+    transform:scale(0.8);
+    transform-origin: right center;
+    overflow: hidden;
+    left: 0;
+}
+.cord-body {
+    background: rgba(255, 255, 255, 0.65);
+    padding: 12px;
+}
+.my-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 16px;
+}
+.el-row {
+    margin-bottom: 20px;
+}
+.el-row:last-child {
+    margin-bottom: 0;
+}
+.el-col {
+    border-radius: 4px;
+}
+
+.grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+}
+@font-face {
+    font-family: 'MdtIcon';
+    src: url('../font/icon.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
