@@ -99,7 +99,7 @@
                         </el-dialog>
 
                     </el-menu-item>
-                    <el-sub-menu :disabled="true">
+                    <el-sub-menu :disabled="!(Authority > 0)">
                         <template #title>
                             <el-icon><location /></el-icon>
                             <el-text size="large">服务器管理</el-text>
@@ -208,6 +208,7 @@ const login = ref(false)
 const showPopup = ref(false)
 const avatar = ref("")
 const body = ref(null);
+const Authority = ref(0)
 
 let loginFormData = reactive({
     name: '',
@@ -217,6 +218,17 @@ let loginFormData = reactive({
 onMounted(() => {
     handleResize()
     window.addEventListener('resize', handleResize);
+    axios.get('https://new.xem8k5.top:1080/api/getUseAuthority')
+            .then(response => {
+                Authority.value = Number(response.data)
+            })
+            .catch((error) => {
+                ElMessage({
+                    message: "发生错误：" + error.response.data,
+                    type: "error",
+                    grouping: true
+                })
+            })
     axios.get('https://new.xem8k5.top:1080/api/loginStatus')
             .then(response => {
                 const status = response.data.status;
@@ -306,6 +318,7 @@ const siteMangeLogin=()=>{
                         document.cookie = `uuid=${cookieData.uuid}; expires=${expirationDateString}; path=/`;
                         document.cookie = `protectKey=${cookieData.protectKey}; expires=${expirationDateString}; path=/`;
                         loading.value = false
+                        dialog.value = false;
                     } else {
                         ElMessage({
                             message: data.status,
