@@ -8,6 +8,7 @@ import Mod from '../src/static/views/modView.vue'
 import Schematic from '../src/static/views/schematicView.vue'
 import ServerStatus from '../src/static/views/serverStatusView.vue'
 import AboutSite from '../src/static/views/adoutSite.vue'
+import webManage from '../src/static/views/webManageView.vue'
 
 const routes = [
     {
@@ -55,6 +56,12 @@ const routes = [
         path: '/aboutSite',
         name: 'aboutSite',
         component: AboutSite
+    }
+    ,
+    {
+        path: '/webManage',
+        name: 'webManage',
+        component: webManage
     }
 ]
 

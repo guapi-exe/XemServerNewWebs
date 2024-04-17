@@ -68,8 +68,6 @@
                             <el-text size="large">管理员登录</el-text>
                         </template>
 
-
-
                         <el-dialog v-model="dialog"
                                    title="登录"
                                    direction="ltr"
@@ -104,7 +102,7 @@
                             <el-icon><location /></el-icon>
                             <el-text size="large">服务器管理</el-text>
                         </template>
-                        <el-menu-item index="7" @click="router.push('/aboutSite')">
+                        <el-menu-item index="7" @click="router.push('/webManage')">
                             <el-icon><location /></el-icon>
                             <template #title>
                                 <el-text size="large">网站用户管理</el-text>
