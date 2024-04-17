@@ -97,7 +97,7 @@
                         </el-dialog>
 
                     </el-menu-item>
-                    <el-sub-menu :disabled="!(Authority > 0)">
+                    <el-sub-menu :disabled="(Authority > 0)">
                         <template #title>
                             <el-icon><location /></el-icon>
                             <el-text size="large">服务器管理</el-text>

@@ -24,10 +24,7 @@
                                 popper-class="my-autocomplete"
                                 placeholder="搜索栏"
                         >
-                            <template #default="{ item }">
-                                <div class="value">{{ item.value }}</div>
-                                <span class="link">{{ item.link }}</span>
-                            </template>
+
                         </el-autocomplete>
 
                     </el-col>
@@ -38,7 +35,7 @@
                             :md="{ span: 4}"
                             :lg="{ span: 2}"
                     >
-                        <el-button type="primary">
+                        <el-button type="primary" @click="loadUser()">
                             <el-icon><Search /></el-icon>
                             <el-text size="large">搜索</el-text>
                         </el-button>
@@ -106,7 +103,7 @@
                 <el-row>
 
 
-                    <el-table v-if="!dialogM"
+                    <el-table v-if="!(dialogM || dialogE)"
                             :data="tableData"
                             style="width: 100%"
                     >
@@ -125,7 +122,7 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column label="权限等级" width="180">
+                        <el-table-column label="权限" width="180">
                             <template #default="scope">
                                 <el-popover effect="light" trigger="hover" placement="top" width="auto">
                                     <template #default>
@@ -147,9 +144,9 @@
                         </el-table-column>
                         <el-table-column label="操作">
                             <template #default="scope">
-                                <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
-                                >编辑</el-button
-                                >
+                                <el-button size="small" @click="handleEdit(scope.$index, scope.row);dialogE = true"
+                                >编辑</el-button>
+
                                 <el-button
                                         size="small"
                                         type="danger"
@@ -165,6 +162,47 @@
 
         </el-col>
     </el-row>
+    <el-dialog v-model="dialogE"
+               :title="'修改用户信息:'+editUserFormData.uuid"
+               direction="ltr"
+               :show-close="false"
+               height="30%"
+               :inputmode="true"
+               v-loading="loadingE">
+        <div class="demo-drawer__content">
+            <el-form :model="editUserFormData" ref="loginForm">
+                <el-form-item label="用户" :label-width="60">
+                    <el-input v-model="editUserFormData.name" placeholder="请输入用户名"/>
+                </el-form-item>
+
+                <el-form-item label="密码" :label-width="60">
+                    <el-input
+                            v-model="editUserFormData.password"
+                            type="password"
+                            placeholder="请输入密码"
+                            show-password
+                    />
+                </el-form-item>
+                <el-form-item label="权限" :label-width="60">
+                    <el-select-v2
+                            v-model="editUserFormData.authority"
+                            filterable
+                            :options="options"
+                            placeholder="选择"
+                            style="width: 240px"
+                    >
+                        <template #default="{ item }">
+                            <span style="margin-right: 8px">{{ item.value }}</span>
+                            <span style="color: var(--el-text-color-secondary); font-size: 13px">{{ item.label }}</span>
+                        </template>
+                    </el-select-v2>
+                </el-form-item>
+            </el-form>
+            <el-button type="primary" :loading="loadingE" @click="loadingE = true;updateUser()">{{
+                    loadingE ? '修改中 ...' : '修改用户信息'
+                }}</el-button>
+        </div>
+    </el-dialog>
 </template>
 
 <style scoped lang="css">
@@ -198,6 +236,8 @@ import axios from "axios";
 import {ElDialog, ElMessage} from "element-plus";
 const dialogM = ref(false)
 const loadingM = ref(false)
+const dialogE = ref(false)
+const loadingE = ref(false)
 const options = ref([
     {
         value: `0`,
@@ -219,6 +259,13 @@ let userFormData = reactive({
     authority: null,
 })
 
+let editUserFormData = reactive({
+    name: "",
+    password: null,
+    authority: null,
+    uuid:""
+})
+
 interface User {
     time: string
     name: string
@@ -229,14 +276,32 @@ interface User {
 const tableData = ref<User[]>([])
 const input = ref("")
 const handleEdit = (index: number, row: User) => {
+    dialogE.value = true
+    editUserFormData.name = row.name
+    editUserFormData.uuid = row.uuid
     console.log(index, row)
 }
 const handleDelete = (index: number, row: User) => {
     console.log(index, row)
+    axios.get(`https://new.xem8k5.top:1080/api/deleteUser?uuid=${row.uuid}`)
+            .then((response) => {
+                loadUser()
+                const data = response.data;
+                ElMessage({
+                    message: "OK"+data,
+                    type: "success"
+                })
+            })
+            .catch(error => {
+                ElMessage({
+                    message: error.response.data,
+                    type: "error"
+                })
+            })
 }
 
 onMounted(()=>{
-    axios.get('https://new.xem8k5.top:1080/api/getUsers')
+    axios.get(`https://new.xem8k5.top:1080/api/getUsers?filter=${input.value}`)
             .then(response => {
                 tableData.value.push(...response.data)
                 console.log(tableData)
@@ -248,7 +313,7 @@ onMounted(()=>{
 })
 const loadUser=()=>{
     tableData.value = []
-    axios.get('https://new.xem8k5.top:1080/api/getUsers')
+    axios.get(`https://new.xem8k5.top:1080/api/getUsers?filter=${input.value}`)
             .then(response => {
                 tableData.value.push(...response.data)
                 console.log(tableData)
@@ -298,6 +363,51 @@ const createUser=()=>{
             type: "error"
         })
         loadingM.value = false
+    }
+}
+
+const updateUser=()=>{
+    if(editUserFormData.name != null && editUserFormData.password != null && editUserFormData.authority != null) {
+        const credentials = {
+            name: editUserFormData.name,
+            protectKey: editUserFormData.password,
+            anthority: editUserFormData.authority,
+            uuid:editUserFormData.uuid
+        };
+        const jsonCredentials = JSON.stringify(credentials);
+        const base64Credentials = btoa(jsonCredentials);
+        const loginPacket = {
+            base64: base64Credentials
+        };
+        axios.post('https://new.xem8k5.top:1080/api/updateUser', loginPacket, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+                .then(response => {
+                    const data = response.data;
+                    loadUser()
+                    ElMessage({
+                        message: "OK"+data,
+                        type: "success"
+                    })
+                    loadingE.value = false
+                    dialogE.value = false;
+                })
+                .catch(error => {
+                    ElMessage({
+                        message: error.response.data,
+                        type: "error"
+                    })
+                    loadingE.value = false
+                    dialogE.value = false;
+                })
+    }else{
+        ElMessage({
+            message: "请输入完整数据",
+            type: "error"
+        })
+        loadingE.value = false
     }
 }
 </script>
