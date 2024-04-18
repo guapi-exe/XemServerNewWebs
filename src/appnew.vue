@@ -39,31 +39,31 @@
                         </template>
                     </el-menu-item>
                     <el-menu-item index="2" @click="router.push('/mod')">
-                        <el-icon><location /></el-icon>
+                        <el-icon><span style="font-family: MdtIcon,sans-serif;color: black;font-style: normal">{{'\uE80F'}}</span></el-icon>
                         <template #title>
                             <el-text size="large">mod站</el-text>
                         </template>
                     </el-menu-item>
                     <el-menu-item index="4" @click="router.push('/schematic')">
-                        <el-icon><location /></el-icon>
+                        <el-icon><List /></el-icon>
                         <template #title>
                             <el-text size="large">蓝图站</el-text>
                         </template>
                     </el-menu-item>
                     <el-menu-item index="5" @click="router.push('/serverStatus')">
-                        <el-icon><location /></el-icon>
+                        <el-icon><span style="font-family: MdtIcon,sans-serif;color: black;font-style: normal">{{'\uE85D'}}</span></el-icon>
                         <template #title>
                             <el-text size="large">服务器状态</el-text>
                         </template>
                     </el-menu-item>
                     <el-menu-item index="6" @click="router.push('/aboutSite')">
-                        <el-icon><location /></el-icon>
+                        <el-icon><span style="font-family: MdtIcon,sans-serif;color: black;font-style: normal">{{'\uE801'}}</span></el-icon>
                         <template #title>
                             <el-text size="large">关于本站</el-text>
                         </template>
                     </el-menu-item>
                     <el-menu-item index="10" @click="dialog = true">
-                        <el-icon><location /></el-icon>
+                        <el-icon><span style="font-family: MdtIcon,sans-serif;color: black;font-style: normal">{{'\uE82C'}}</span></el-icon>
                         <template #title>
                             <el-text size="large">管理员登录</el-text>
                         </template>
@@ -97,25 +97,25 @@
                         </el-dialog>
 
                     </el-menu-item>
-                    <el-sub-menu :disabled="(Authority > 0)">
+                    <el-sub-menu :disabled="!(Authority > 0)">
                         <template #title>
-                            <el-icon><location /></el-icon>
+                            <el-icon><span style="font-family: MdtIcon,sans-serif;color: black;font-style: normal">{{'\uE82C'}}</span></el-icon>
                             <el-text size="large">服务器管理</el-text>
                         </template>
                         <el-menu-item index="7" @click="router.push('/webManage')">
-                            <el-icon><location /></el-icon>
+                            <el-icon><span style="font-family: MdtIcon,sans-serif;color: black;font-style: normal">{{'\uE872'}}</span></el-icon>
                             <template #title>
                                 <el-text size="large">网站用户管理</el-text>
                             </template>
                         </el-menu-item>
-                        <el-menu-item index="8" @click="router.push('/aboutSite')">
-                            <el-icon><location /></el-icon>
+                        <el-menu-item index="8" @click="router.push('/gameAccount')">
+                            <el-icon><span style="font-family: MdtIcon,sans-serif;color: black;font-style: normal">{{'\uE872'}}</span></el-icon>
                             <template #title>
                                 <el-text size="large">玩家用户管理</el-text>
                             </template>
                         </el-menu-item>
                         <el-menu-item index="9" @click="router.push('/aboutSite')">
-                            <el-icon><location /></el-icon>
+                            <el-icon><span style="font-family: MdtIcon,sans-serif;color: black;font-style: normal">{{'\uE85D'}}</span></el-icon>
                             <template #title>
                                 <el-text size="large">Claj房间管理</el-text>
                             </template>
@@ -190,7 +190,7 @@ body {
 <script lang="ts" setup>
 import {ElMessage} from "element-plus";
 import {onMounted, ref} from 'vue'
-import {Location,Expand,Fold} from '@element-plus/icons-vue'
+import {Location,Expand,Fold,List} from '@element-plus/icons-vue'
 import {useRouter} from "vue-router";
 import {ElDialog} from "element-plus";
 import axios from "axios";

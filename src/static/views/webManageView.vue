@@ -93,7 +93,7 @@
                                     </div>
                                 </el-dialog>
                             </el-button>
-                            <el-button type="danger">
+                            <el-button type="danger" :disabled="true">
                                 <el-icon><DeleteFilled /></el-icon>
                                 <el-text size="large">删除用户</el-text>
                             </el-button>
@@ -127,7 +127,7 @@
                                 <el-popover effect="light" trigger="hover" placement="top" width="auto">
                                     <template #default>
                                         <div>权限等级: {{ scope.row.authority }}</div>
-                                        <div>{{scope.row.authority == 0 ? scope.row.authority == 2 ? "普通用户" : "超级管理员:最高权限可以管理任何人员":"管理员:可以对普通用户和玩家进行管理"}}</div>
+                                        <div>{{scope.row.authority == 0 ? "普通用户" : scope.row.authority == 2 ? "超级管理员:最高权限可以管理任何人员":"管理员:可以对普通用户和玩家进行管理"}}</div>
                                     </template>
                                     <template #reference>
                                         <el-tag>{{scope.row.authority == 0 ? "普通用户" : scope.row.authority == 2 ? "超级管理员":"管理员"}}</el-tag>
