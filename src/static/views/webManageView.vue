@@ -356,6 +356,7 @@ const createUser=()=>{
                         message: error.response.data,
                         type: "error"
                     })
+                    loadingM.value = false
                 })
     }else{
         ElMessage({

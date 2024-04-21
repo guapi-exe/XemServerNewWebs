@@ -96,20 +96,18 @@
                     <el-row v-for="player in serverStatus.playerList">
                         <el-col>
                             <el-row>
-                                <el-col :span="18">
+                                <el-col :span="16">
                                     <div class="parent">
                                         <span :class="['sprite',`unit-${player.unitType}`,'sprite-small']" ></span>
                                         <div v-html="generateSpanElements(player.name)"></div>
                                     </div>
                                 </el-col>
-                                <el-col :span="6">
+                                <el-col :span="8">
                                     <el-button-group>
+                                        <el-button v-if="player.admin == 'true'" :disabled="!(Authority >= 1)" type="danger" @click="setAdmin(player.player)"><h3 style="font-family: MdtIcon,sans-serif;color: white">{{ '\uE82C' }}</h3></el-button>
+                                        <el-button v-if="player.admin == 'false'" :disabled="!(Authority >= 1)" type="primary" @click="setAdmin(player.player)"><h3 style="font-family: MdtIcon,sans-serif;color: white">{{ '\uE82C' }}</h3></el-button>
                                         <el-button type="primary" :icon="CopyDocument" @click="copyToClipboard(player.name)"></el-button>
-                                    </el-button-group>
-                                    <el-button-group>
                                         <el-button type="primary" :icon="Edit"></el-button>
-                                    </el-button-group>
-                                    <el-button-group>
                                         <el-button type="danger"><h3 style="font-family: MdtIcon,sans-serif;color: white">{{ '\uE81A' }}</h3></el-button>
                                     </el-button-group>
                                 </el-col>
@@ -131,6 +129,7 @@ import {onMounted, ref} from "vue";
 import * as echarts from 'echarts';
 import axios from "axios";
 import {ElButton, ElDivider, ElMessage} from "element-plus";
+const Authority = ref(0)
 const serverStatus = ref({
     name: null,
     version: null,
@@ -147,7 +146,7 @@ const serverStatus = ref({
             admin:null,
             unit:null,
             unitType:null,
-            player:null,
+            player:"",
             x:null,
             y:null,
             rotation:null,
@@ -161,6 +160,10 @@ const serverStatus = ref({
 })
 const maxRam = ref(4096)
 onMounted(() => {
+    reload()
+})
+
+const reload = ()=>{
     axios.get("https://new.xem8k5.top:1080/api/serverStatus").then((res) => {
         serverStatus.value = res.data;
         const tpsChart = echarts.init(document.getElementById('tpsChart'));
@@ -244,7 +247,7 @@ onMounted(() => {
 
         });
     })
-})
+}
 
 const customColors = [
     { color: '#f56c6c', percentage: 20 },
@@ -297,7 +300,6 @@ colormap.set("MAROON", "#b03b60");
 
 function generateSpanElements(text: string): string {
     text = text.replace(/\[\]/g, "[white]");
-    console.log()
     const colorRegex = /\[([^\]]+)\]([^\[]+|\[\])/g;
     let match;
     let result = '';
@@ -337,5 +339,30 @@ const copyToClipboard=(text:string)=> {
             });
 }
 
+const setAdmin=(name:string)=>{
+    axios.get(`https://new.xem8k5.top:1080/api/setAdmin?player=${name}`)
+            .then((res) => {
+                const data = res.data
+                ElMessage({
+                    message: "OK"+data,
+                    type: "success"
+                })
+                reload()
+            })
+            .catch(error => {
+                ElMessage({
+                    message: error.response.data,
+                    type: "error"
+                })
+                reload()
+            })
+}
+
+onMounted(()=>{
+    axios.get('https://new.xem8k5.top:1080/api/getUseAuthority')
+            .then(response => {
+                Authority.value = Number(response.data)
+            })
+})
 </script>
 

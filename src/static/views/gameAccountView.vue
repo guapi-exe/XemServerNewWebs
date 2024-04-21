@@ -49,49 +49,6 @@
                             <el-button type="success" @click="dialogM = true" :disabled="true">
                                 <el-icon><Plus /></el-icon>
                                 <el-text size="large">新建用户</el-text>
-                                <el-dialog v-model="dialogM"
-                                           title="创建用户"
-                                           direction="ltr"
-                                           :show-close="false"
-                                           height="30%"
-                                           :inputmode="true"
-                                           :disabled="true"
-                                           v-loading="loadingM">
-
-                                    <div class="demo-drawer__content">
-                                        <el-form :model="userFormData" ref="loginForm">
-                                            <el-form-item label="用户" :label-width="60">
-                                                <el-input v-model="userFormData.name" placeholder="请输入用户名"/>
-                                            </el-form-item>
-
-                                            <el-form-item label="密码" :label-width="60">
-                                                <el-input
-                                                        v-model="userFormData.password"
-                                                        type="password"
-                                                        placeholder="请输入密码"
-                                                        show-password
-                                                />
-                                            </el-form-item>
-                                            <el-form-item label="权限等级" :label-width="60">
-                                                <el-select-v2
-                                                        v-model="userFormData.authority"
-                                                        filterable
-                                                        :options="options"
-                                                        placeholder="选择"
-                                                        style="width: 240px"
-                                                >
-                                                    <template #default="{ item }">
-                                                        <span style="margin-right: 8px">{{ item.value }}</span>
-                                                        <span style="color: var(--el-text-color-secondary); font-size: 13px">{{ item.label }}</span>
-                                                    </template>
-                                                </el-select-v2>
-                                            </el-form-item>
-                                        </el-form>
-                                        <el-button type="primary" :loading="loadingM" @click="loadingM = true;createUser()">{{
-                                                loadingM ? '创建中 ...' : '创建用户'
-                                            }}</el-button>
-                                    </div>
-                                </el-dialog>
                             </el-button>
                             <el-button type="danger" :disabled="true">
                                 <el-icon><DeleteFilled /></el-icon>
@@ -109,10 +66,7 @@
                               :data="tableData"
                               style="width: 100%;overflow:auto"
                     >
-                        <el-table-column
-                                label="id"
-                                width="180"
-                        >
+                        <el-table-column label="id" width="180">
                             <template #default="scope">
                                 <div style="display: flex; align-items: center">
                                     <el-icon><User /></el-icon>
@@ -120,10 +74,16 @@
                                 </div>
                             </template>
                         </el-table-column>
+                        <el-table-column label="exp" width="180">
+                            <template #default="scope">
+                                <div style="display: flex; align-items: center">
+                                    <span style="margin-left: 10px">{{ scope.row.exp ? scope.row.exp : "空"}}</span>
+                                </div>
+                            </template>
+                        </el-table-column>
                         <el-table-column label="qq" width="180" >
                             <template #default="scope">
                                 <div style="display: flex; align-items: center">
-                                    <el-icon><User /></el-icon>
                                     <span style="margin-left: 10px">{{ scope.row.qq ? scope.row.qq : "空"}}</span>
                                 </div>
                             </template>
@@ -163,6 +123,20 @@
                                 </div>
                             </template>
                         </el-table-column>
+                        <el-table-column label="育碧" width="180">
+                            <template #default="scope">
+                                <div style="display: flex; align-items: center">
+                                    <span style="margin-left: 10px">{{ scope.row.coin ? scope.row.coin : "空"}}</span>
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="钻石" width="180">
+                            <template #default="scope">
+                                <div style="display: flex; align-items: center">
+                                    <span style="margin-left: 10px">{{ scope.row.crystal ? scope.row.crystal : "空"}}</span>
+                                </div>
+                            </template>
+                        </el-table-column>
                         <el-table-column label="注册时间" width="180">
                             <template #default="scope">
                                 <div style="display: flex; align-items: center">
@@ -199,7 +173,7 @@
         </el-col>
     </el-row>
     <el-dialog v-model="dialogE"
-               :title="'修改用户信息:'+editUserFormData.uuid"
+               :title="'修改用户信息:'+editUserFormData.id"
                direction="ltr"
                :show-close="false"
                height="30%"
@@ -207,32 +181,35 @@
                v-loading="loadingE">
         <div class="demo-drawer__content">
             <el-form :model="editUserFormData" ref="loginForm">
-                <el-form-item label="用户" :label-width="60">
-                    <el-input v-model="editUserFormData.name" placeholder="请输入用户名"/>
+                <el-form-item label="exp" :label-width="60">
+                    <el-input v-model="editUserFormData.exp" placeholder="请输入exp"/>
+                </el-form-item>
+                <el-form-item label="育碧" :label-width="60">
+                    <el-input v-model="editUserFormData.coin" placeholder="请输入育碧"/>
+                </el-form-item>
+                <el-form-item label="钻石" :label-width="60">
+                    <el-input v-model="editUserFormData.crystal" placeholder="请输入钻石"/>
+                </el-form-item>
+                <el-form-item label="qq" :label-width="60">
+                    <el-input v-model="editUserFormData.qq" placeholder="请输入qq"/>
+                </el-form-item>
+                <el-form-item label="邮箱" :label-width="60">
+                    <el-input v-model="editUserFormData.mail" placeholder="请输入邮箱"/>
+                </el-form-item>
+                <el-form-item label="qq频道" :label-width="60">
+                    <el-input v-model="editUserFormData.qqChannel" placeholder="请输入qq频道"/>
+                </el-form-item>
+                <el-form-item label="discord" :label-width="60">
+                    <el-input v-model="editUserFormData.discord" placeholder="请输入discord"/>
+                </el-form-item>
+                <el-form-item label="游玩时间" :label-width="60">
+                    <el-input v-model="editUserFormData.playTime" placeholder="请输入游玩时间"/>
+                </el-form-item>
+                <el-form-item label="语言" :label-width="60">
+                    <el-input v-model="editUserFormData.lang" placeholder="请输入语言"/>
                 </el-form-item>
 
-                <el-form-item label="密码" :label-width="60">
-                    <el-input
-                            v-model="editUserFormData.password"
-                            type="password"
-                            placeholder="请输入密码"
-                            show-password
-                    />
-                </el-form-item>
-                <el-form-item label="权限" :label-width="60">
-                    <el-select-v2
-                            v-model="editUserFormData.authority"
-                            filterable
-                            :options="options"
-                            placeholder="选择"
-                            style="width: 240px"
-                    >
-                        <template #default="{ item }">
-                            <span style="margin-right: 8px">{{ item.value }}</span>
-                            <span style="color: var(--el-text-color-secondary); font-size: 13px">{{ item.label }}</span>
-                        </template>
-                    </el-select-v2>
-                </el-form-item>
+
             </el-form>
             <el-button type="primary" :loading="loadingE" @click="loadingE = true;updateUser()">{{
                     loadingE ? '修改中 ...' : '修改用户信息'
@@ -272,41 +249,29 @@ import axios from "axios";
 import {ElDialog, ElMessage} from "element-plus";
 const dialogM = ref(false)
 const loading = ref(false)
-const loadingM = ref(false)
 const dialogE = ref(false)
 const loadingE = ref(false)
 const noMore = ref(false)
 const page = ref(0)
-const options = ref([
-    {
-        value: `0`,
-        label: `普通用户`,
-    },
-    {
-        value: `1`,
-        label: `管理员`,
-    },
-    {
-        value: `2`,
-        label: `超级管理员`,
-    }
-
-])
-let userFormData = reactive({
-    name: null,
-    password: null,
-    authority: null,
-})
 
 let editUserFormData = reactive({
-    name: "",
-    password: null,
-    authority: null,
-    uuid:""
+    id: 0,
+    exp:0,
+    coin:0,
+    crystal:0,
+    qq : "",
+    mail : "",
+    qqChannel : "",
+    discord : "",
+    playTime : "",
+    lang : "",
 })
 
 interface User {
     id: number,
+    exp:number,
+    coin:number,
+    crystal:number,
     qq : string,
     mail : string,
     qqChannel : string,
@@ -320,8 +285,16 @@ const tableData = ref<User[]>([])
 const input = ref("")
 const handleEdit = (index: number, row: User) => {
     dialogE.value = true
-    editUserFormData.name = row.qq
-    editUserFormData.uuid = row.mail
+    editUserFormData.id = row.id
+    editUserFormData.exp = row.exp
+    editUserFormData.coin = row.coin
+    editUserFormData.crystal = row.crystal
+    editUserFormData.qq = row.qq
+    editUserFormData.mail = row.mail
+    editUserFormData.qqChannel = row.qqChannel
+    editUserFormData.discord = row.discord
+    editUserFormData.playTime = row.playTime
+    editUserFormData.lang = row.lang
     console.log(index, row)
 }
 const handleDelete = (index: number, row: User) => {
@@ -374,11 +347,47 @@ const loadUser=()=>{
             })
 }
 
-const createUser=()=>{
-
-}
 
 const updateUser=()=>{
-
+    const credentials = {
+        id: editUserFormData.id,
+        exp:editUserFormData.exp,
+        coin:editUserFormData.coin,
+        crystal:editUserFormData.crystal,
+        qq : editUserFormData.qq,
+        mail : editUserFormData.mail,
+        qqChannel : editUserFormData.qqChannel,
+        discord : editUserFormData.discord,
+        playTime : editUserFormData.playTime,
+        lang : editUserFormData.lang,
+    };
+    const jsonCredentials = JSON.stringify(credentials);
+    const base64Credentials = btoa(jsonCredentials);
+    const loginPacket = {
+        base64: base64Credentials
+    };
+    axios.post('https://new.xem8k5.top:1080/api/updatePlayerInfo', loginPacket, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+            .then(response => {
+                const data = response.data;
+                loadUser()
+                ElMessage({
+                    message: "OK"+data,
+                    type: "success"
+                })
+                loadingE.value = false
+                dialogE.value = false;
+            })
+            .catch(error => {
+                ElMessage({
+                    message: error.response.data,
+                    type: "error"
+                })
+                loadingE.value = false
+                dialogE.value = false;
+            })
 }
 </script>
