@@ -49,8 +49,6 @@ import {ElementPlus} from '@element-plus/icons-vue'
 import Login from './static/views/loginView.vue'
 import VueClipboard from 'vue-clipboard2'
 
-
-
 const router = useRouter()
 router.push('/')
 </script>

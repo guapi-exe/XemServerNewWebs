@@ -9,7 +9,8 @@ import router from "../router/index.js";
 import VueClipboard from "vue-clipboard2";
 
 
-const app = createApp(App).use(router)
+const app = createApp(App)
+    .use(router)
 axios.defaults.withCredentials = true
 app.use(VueClipboard)
 app.use(ElementPlus)

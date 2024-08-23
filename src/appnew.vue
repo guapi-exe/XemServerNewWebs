@@ -114,10 +114,16 @@
                                 <el-text size="large">玩家用户管理</el-text>
                             </template>
                         </el-menu-item>
-                        <el-menu-item index="9" @click="router.push('/aboutSite')">
+                        <el-menu-item index="10" @click="router.push('/adminCommand')">
+                            <el-icon><span style="font-family: MdtIcon,sans-serif;color: black;font-style: normal">{{'\uE81A'}}</span></el-icon>
+                            <template #title>
+                                <el-text size="large">玩家封禁管理</el-text>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item index="9">
                             <el-icon><span style="font-family: MdtIcon,sans-serif;color: black;font-style: normal">{{'\uE85D'}}</span></el-icon>
                             <template #title>
-                                <el-text size="large">Claj房间管理</el-text>
+                                <el-text size="large">暂无开发计划</el-text>
                             </template>
                         </el-menu-item>
                     </el-sub-menu>
@@ -335,5 +341,6 @@ const siteMangeLogin=()=>{
                 });
     }
 }
+
 
 </script>
